@@ -1,5 +1,6 @@
 import { getElem } from './helper.js'
 import { STATE } from './state.js'
+import { Forecast} from './forecast.js'
 
 export class ForecastListView {
     #forecastTableBody
@@ -8,14 +9,12 @@ export class ForecastListView {
         this.#forecastTableBody = getElem(tableBodyId)
     }
 
-    showForecast() {
-        console.log(JSON.parse(JSON.stringify(STATE.currentForecastList)))
-        if(!STATE.currentForecastList) {
+    showForecast(item) {
+        if(item instanceof Forecast) {
+            console.log('item is Forecast')
+            this.#forecastTableBody.append(item.createElement())
+        } else {
             return
         }
-
-        STATE.currentForecastList.forEach(item => {
-            this.#forecastTableBody.append(item.createElement())
-        })
     }
 }

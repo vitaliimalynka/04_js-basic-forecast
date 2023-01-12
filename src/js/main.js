@@ -9,22 +9,13 @@ const contentSwitcher = new ContentSwitcher()
 window.addEventListener('load', async () => {
     const forecastListView = new ForecastListView('#tableBody')
 
-    // STATE.citiesList.forEach( async cityId => {
-    //     const currentForecast = await dataService.getWeatherForecast(cityId)
-    //     STATE.currentForecastList.push(new Forecast(currentForecast))
-    //     forecastListView.showForecast()
-    // })
-    
-    const data = await Promise.all(STATE.citiesList.map(cityId => {
-        return dataService.getWeatherForecast(cityId)
-    }))
-    const forecastList = data.map(item => new Forecast(item))
-
-    STATE.currentForecastList = [...STATE.currentForecastList, ...forecastList]
-    forecastListView.showForecast()
-
-    
-
+    STATE.citiesList.forEach( async cityId => {
+        const responseObj = await dataService.getWeatherForecast(cityId)
+        const currentForecast = new Forecast(responseObj)
+        STATE.currentForecastList.push(currentForecast)
+        
+        forecastListView.showForecast(currentForecast)
+    })
 
     contentSwitcher.showContent()
     contentSwitcher.disablePreloader()
